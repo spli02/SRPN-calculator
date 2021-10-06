@@ -12,25 +12,52 @@ public class SRPN {
       System.out.println("queue: " + queue);
                            
       if (NumHelper.isNumeric(s)) {
-        System.out.println("isOnlyNumber?");
         queue.add(Long.parseLong(s));
       } else {
-        String withoutSpaceS = s.replaceAll(" ", "");
-        int inputCharLength = withoutSpaceS.length();
+        int inputCharLength = s.length();
 
         if(inputCharLength == 1){
           handleOneChar(s.charAt(0));
         } else {
           handleMultipleInput(s, inputCharLength);
-          System.out.println("isMultipleChar?");
         }
       }
     }
 
     private void handleMultipleInput (String s, int inputCharLength) {
-      // String num;
+      String num = "";
+      boolean isComment = false;
       for (int i = 0; i < inputCharLength; i ++) {
-        processCommand(s.substring(i, i+1));
+        String currentS = s.substring(i, i+1);
+        String nextS = "";
+        if (i != inputCharLength - 1) {
+          nextS = s.substring(i+1, i+2);
+        }
+
+        if (currentS.matches("^\\#*$")) {
+          isComment = !isComment;
+          continue;
+        }
+        if (currentS.matches("^\\s*$")) {
+          continue;
+        }
+
+        if(!isComment) {
+          if (NumHelper.isNumeric(currentS)) {
+            if (NumHelper.isNumeric(nextS)){
+              num = currentS + nextS;
+            } else {
+              if (num!= "") {
+                queue.add(Long.parseLong(num));
+                num = "";
+              } else {
+                queue.add(Long.parseLong(currentS));
+              }
+            }
+          } else {
+            handleOneChar(s.charAt(i));
+          }
+        }
       }
     }
 
