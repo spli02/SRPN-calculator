@@ -22,9 +22,10 @@ public class SRPN {
       }
     }
 
-    private void handleMultipleInput (String s, int inputCharLength) {
+    private void handleMultipleInput(String s, int inputCharLength) {
       String num = "";
       boolean isComment = false;
+
       for (int i = 0; i < inputCharLength; i ++) {
         String currentS = s.substring(i, i+1);
         String nextS = "";
@@ -38,6 +39,7 @@ public class SRPN {
         if (currentS.matches("^\\s*$")) {
           continue;
         }
+        
         if(!isComment) {
           if (NumHelper.isNumeric(currentS)) {
             if (NumHelper.isNumeric(nextS)){
@@ -70,7 +72,7 @@ public class SRPN {
           if (randomNum != 0) {
             queue.add(randomNum);
           } else {
-            System.out.println("Stack overflow.");
+            PrintHelper.stackOverflow();
           }
         break;
         case '+':
@@ -82,7 +84,7 @@ public class SRPN {
           beforeCalculation(inputChar);
         break;
         default:
-          System.out.println("Unrecognised operator or operand \"" + inputChar + "\"." );
+          PrintHelper.noOperator(inputChar);
         break;
       }
     }
@@ -93,11 +95,11 @@ public class SRPN {
         resetRequired = false;
       } 
       if (queue.size() == 1) {
-        System.out.println("Stack underflow.");
+        PrintHelper.stackUnderflow();
       } else if (queue.getLast() == 0 && inputChar == '/'){
-        System.out.println("Divide by 0.");
+        PrintHelper.divideZero();
       } else if (queue.getLast() == 0 && inputChar == '%'){
-        System.out.println("fg: %: no such job");
+        PrintHelper.noJob();
       } else {
         handleCalculation(inputChar);
       }
