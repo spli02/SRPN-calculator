@@ -8,9 +8,7 @@ public class SRPN {
     Deque<Long> queue = new ArrayDeque<>();
     boolean resetRequired;
 
-    public void processCommand(String s) {
-      System.out.println("queue: " + queue);
-                           
+    public void processCommand(String s) {                           
       if (NumHelper.isNumeric(s)) {
         queue.add(Long.parseLong(s));
       } else {
@@ -41,15 +39,14 @@ public class SRPN {
         if (currentS.matches("^\\s*$")) {
           continue;
         }
-
         if(!isComment) {
           if (NumHelper.isNumeric(currentS)) {
             if (NumHelper.isNumeric(nextS)){
               num = currentS + nextS;
             } else {
               if (num!= "") {
-                queue.add(Long.parseLong(num));
-                num = "";
+               queue.add(Long.parseLong(num));
+               num = "";
               } else {
                 queue.add(Long.parseLong(currentS));
               }
@@ -65,20 +62,33 @@ public class SRPN {
       switch(inputChar) {
         case '=':
           resetRequired = true;
-          System.out.println("= " + queue.getLast());
         break;
         case 'd':
           getAllQueue();
-          System.out.println("d: " + queue.getLast());
+        break;
+        case 'r':
+          long randomNum = NumHelper.getRandomNum();
+          if (randomNum != 0) {
+            queue.add(randomNum);
+          } else {
+            System.out.println("Stack overflow.");
+          }
+        break;
+        case '+':
+        case '-':
+        case '/':
+        case '*':
+        case '^':
+          beforeCalculation(inputChar);
         break;
         default:
-          beforeCalculation(inputChar);
+          System.out.println("Unrecognised operator or operand \"" + inputChar + "\"." );
+        break;
       }
     }
 
     private void beforeCalculation(char inputChar) {
       if (resetRequired && queue.size() > 2) {
-        System.out.println("reset done!");
         queue.removeFirst();
       } else if (queue.size() == 1) {
         System.out.println("Stack underflow.");
@@ -97,9 +107,7 @@ public class SRPN {
       }
     }
 
-    private void handleCalculation(char inputChar){
-      System.out.println("queue in inputChar: " + queue);
-      
+    private void handleCalculation(char inputChar){      
       long stackA = queue.removeLast();
       long stackB = queue.removeLast();
       long result = 0;
