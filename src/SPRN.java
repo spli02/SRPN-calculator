@@ -31,7 +31,6 @@ public class SRPN {
         if (i != inputCharLength - 1) {
           nextS = s.substring(i+1, i+2);
         }
-
         if (currentS.matches("^\\#*$")) {
           isComment = !isComment;
           continue;
@@ -78,6 +77,7 @@ public class SRPN {
         case '-':
         case '/':
         case '*':
+        case '%':
         case '^':
           beforeCalculation(inputChar);
         break;
@@ -90,10 +90,14 @@ public class SRPN {
     private void beforeCalculation(char inputChar) {
       if (resetRequired && queue.size() > 2) {
         queue.removeFirst();
-      } else if (queue.size() == 1) {
+        resetRequired = false;
+      } 
+      if (queue.size() == 1) {
         System.out.println("Stack underflow.");
-      } else if (queue.getLast() == 0) {
+      } else if (queue.getLast() == 0 && inputChar == '/'){
         System.out.println("Divide by 0.");
+      } else if (queue.getLast() == 0 && inputChar == '%'){
+        System.out.println("fg: %: no such job");
       } else {
         handleCalculation(inputChar);
       }
@@ -124,6 +128,9 @@ public class SRPN {
           break;
         case '*':
           result = stackB * stackA;
+          break;
+        case '%':
+          result = stackB % stackA;
           break;
         case '^':
           result = (long) Math.pow(stackB, stackA);
