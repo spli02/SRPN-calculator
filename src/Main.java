@@ -12,6 +12,7 @@ class Main {
     // method in SRPN.java
 
     SRPN srpn = new SRPN();
+    Queue queue = new Queue();
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -25,7 +26,7 @@ class Main {
           System.exit(0);
         }
         // Otherwise, (attempt to) process the character
-        srpn.processCommand(command);
+        srpn.processCommand(command, queue);
       }
     } catch (IOException e) {
       System.err.println(e.getMessage());
