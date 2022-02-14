@@ -1,2 +1,2 @@
 # SRPN-Calculator
-Java SRPN Calculator - UoB assignment
+Java SRPN Calculator
